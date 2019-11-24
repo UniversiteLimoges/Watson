@@ -1,0 +1,79 @@
+body { 
+    /* background-color: #f8f9fa; */
+    background: rgb(196,189,221);
+    background: linear-gradient(90deg, rgba(196,189,221,1) 0%, rgba(150,207,247,1) 43%, rgba(161,238,230,1) 100%); 
+
+    position: relative;
+    padding-top: 100px;
+    min-height: 100%;
+}
+
+#logo{
+	width:230px;
+	height: 0;
+	display: block;
+	overflow: hidden;
+	padding-top: 76px;
+	font-size: 0;
+	background: url("../images/logo.png") no-repeat center center;
+}
+
+#rss {}
+
+#rss > img {
+    position: relative;
+    top: -2px;
+    width: 18px;
+	height: 18px;
+}
+
+.clear { clear: both; height: 60px; }
+
+.footer {
+    border-top: 1px solid #ccc;
+    padding: 20px;
+    /* margin-top: 40px; */
+    text-align: center;
+    background-color: #222222;
+    color: #fff;
+    max-width: 100%;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.articleTitle:hover, .articleTitle:focus {
+    text-decoration: none;
+}
+
+.adminTable {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#errorPanel {
+    padding-top: 30px;
+    padding-bottom: 10px;
+}
+
+.links > div {
+    /* margin: 0 2px; */
+    min-height: 180px;
+}
+
+.links > div:hover {
+    background-color: #dde;
+    border: black solid 1px;
+
+    color: rgb(18, 155, 48);
+    font-size: 1.1em;
+    transition: background-color 3s, color 1.5s, font-size 1.5s;
+}
+
+#pagination {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid white;
+}

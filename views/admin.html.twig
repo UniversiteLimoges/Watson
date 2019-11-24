@@ -1,0 +1,145 @@
+{% extends "layout.html.twig" %}
+{% set adminMenu = true %}
+
+{% block title %}Administration{% endblock %}
+
+{% block content %}
+<h2 class="text-center">{{ block('title') }}</h2>
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="#links" data-toggle="tab">Liens</a></li>
+            <li><a href="#users" data-toggle="tab">Utilisateurs</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Panneau des liens -->
+<div class="tab-content">
+    <div class="tab-pane fade in active adminTable" id="links">
+        <a href="{{ path('admin_link_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter lien</button></a>
+
+        {% if links %}
+        <div class="table-responsive">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Auteur</th>
+                        <th>Description</th>
+                        <th></th>  <!-- Actions column -->
+                    </tr>
+                </thead>
+                {% for link in links %}
+                    <tr>
+                    <td><a class="linkTitle" href="{{ path('link', { 'id': link.id }) }}">{{ link.title }}</a></td>
+                    <td>{{ link.user.username }}</td>
+                    <td>{{ link.desc | truncate(60) }}</td>
+                    <td>
+                        <a href="{{ path('admin_link_edit', { 'id': link.id }) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#linkDialog{{ link.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <div class="modal fade" id="linkDialog{{ link.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Confirmation nécéssaire</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Voulez vous vraiment supprimer ce lien ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                        <a href="{{ path('admin_link_delete', { 'id': link.id }) }}" class="btn btn-danger">Confirmer</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+                <!-- Signe < affiché si supérieur nb pages -->
+                <div class="text-center" id="pagination">
+                    {% if pagination.currentPage != 1 %}
+                        <a href="{{ path('admin', {page: pagination.currentPage - 1}) }}"> < </a>
+                    {% endif %}
+                    {% for i in 1 .. pagination.nbTotalOfPages %}
+                        {% if i == pagination.currentPage %}
+                            {{ i }}
+                        {% else %}
+                            <a href="{{ path('admin', {page: i}) }}">{{ i }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    <!-- Signe > affiché si inférieur nb pages -->
+                    {% if pagination.currentPage != pagination.nbTotalOfPages %}
+                        <a href="{{ path('admin', {page: pagination.currentPage + 1}) }}"> > </a>
+                    {% endif %}
+                </div>
+                
+        </div>
+
+        {% else %}
+            <div class="alert alert-warning">Pas de liens trouvés.</div>
+        {% endif %}
+    </div>
+
+    <!-- Panneau d'utilisateur -->
+    <div class="tab-pane fade adminTable" id="users">
+
+        <!-- Bouton ajout d'utilisateur -->
+        <a href="{{ path('admin_user_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter utilisateur</button></a>
+
+        <!-- Affichage des utilisateurs --> 
+        {% if users %}
+        <div class="table-responsive">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th></th>  <!-- Actions column -->
+                    </tr>
+                </thead>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</a></td>
+                    <td>
+                        <a href="{{ path('admin_user_edit', { 'id': user.id }) }}" class="btn btn-info btn-xs" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+                        <button type="button" class="btn btn-danger btn-xs" title="Supprimer" data-toggle="modal" data-target="#userDialog{{ user.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <div class="modal fade" id="userDialog{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Confirmation nécéssaire</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Voulez vous vraiment supprimer cet utilisateur ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                        <a href="{{ path('admin_user_delete', { 'id': user.id }) }}" class="btn btn-danger">Confirmer</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">Pas d'utilisateurs trouvés.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
